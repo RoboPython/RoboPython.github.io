@@ -8,7 +8,7 @@ First ones are functions relating to actions that happen over vertices. Update s
 
 //1
 function mousedownVertex(id){
-    console.log("mouseDownVertex");
+    console.log("GOOOOOOOOOOOOOD");
     originVertex = state.Vertices[id];
   
     //generates id to use for new particle and new vertex being created
@@ -29,6 +29,7 @@ function mousedownVertex(id){
                                         newVertexId,
                                         originVertex.getX(),
                                         originVertex.getY(),
+                                        20
                                        );
   
     //wires in the connections between particles and vertices
@@ -107,7 +108,7 @@ function mousedownVertex(id){
   }
   
   function mousedown(pageX,pageY){
-    console.log("mousedown");
+    console.log("BAAAAAAAAAAAAAAAAAAAD");
     var originVertexId = state.vertexID.next().value;
     var newParticleId = state.particleID.next().value;
     var newVertexId = state.vertexID.next().value;
@@ -117,6 +118,7 @@ function mousedownVertex(id){
                                         originVertexId,
                                         pageX,
                                         pageY,
+                                        20
                                        );
   
     originVertex = state.Vertices[originVertexId];
@@ -139,6 +141,7 @@ function mousedownVertex(id){
                                         newVertexId,
                                         originVertex.getX()+10,
                                         originVertex.getY()+10,
+                                        20
                                        );
   
     //wires in the connections between particles and vertices
@@ -234,7 +237,7 @@ function handler(e) {
         for(var i=0;i<Object.keys(state.Vertices).length;i++){
           
           if(Object.keys(state.Vertices)[i]!= state.selectedVertexId){
-            if (intersects(state.Vertices[state.selectedVertexId],state.Vertices[Object.keys(state.Vertices)[i]],20)){
+            if (intersects(state.Vertices[state.selectedVertexId],state.Vertices[Object.keys(state.Vertices)[i]],state.Vertices[state.selectedVertexId].radius)){
               intersectionActivated = true;
               console.log("Intersection!")
               intersectionId = Object.keys(state.Vertices)[i];

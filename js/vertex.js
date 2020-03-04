@@ -1,16 +1,18 @@
-function Vertex (id,x,y,updateState){
+function Vertex (id,x,y,radius){
     this.x = x;
     this.y = y;
     this.id = id;
+    this.radius = radius
     this.connections = [];
     this.updateState = updateState;
     this.layer = new Konva.Layer();
-    this.colour = 'black'
+    this.colour = 'black'//'#'+Math.floor(Math.random()*16777215).toString(16); //for testing will be black for production
+
     this.circle = new Konva.Circle({
         x: this.x,
         y: this.y,
-        radius: 20,
-        fill: 'black',
+        radius: radius,
+        fill: this.colour,
     });
 
     this.destroy = function(){
@@ -60,25 +62,24 @@ function Vertex (id,x,y,updateState){
       this.layer.moveToTop();
     }
 
-    
-
     var mouseover = function (id) {
-      this.updateState("mouseoverVertex",{id});
+      updateState("mouseoverVertex",{id});
     }
     this.circle.on('mouseover',()=>{mouseover(this.id)} );
 
     var mouseout = function(id){
-      this.updateState("mouseoutVertex");
+      updateState("mouseoutVertex");
+      
     }
     this.circle.on('mouseout', ()=>{mouseout(this.id)});
 
     var mousedown = function(id){
-      this.updateState("mousedownVertex",{id});
+      updateState("mousedownVertex",{id});
     }
     this.circle.on('mousedown', ()=>{mousedown(this.id)});
 
     var mouseup = function(){
-      this.updateState("mouseupVertex");
+      updateState("mouseupVertex");
     }
     this.circle.on('mouseup', ()=>{mouseup(this.id)});
 }

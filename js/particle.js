@@ -1,4 +1,3 @@
-
 function Particle (id,name,anti,xi,yi,xf,yf) {
     this.id = id;
     this.anti = false;
@@ -13,17 +12,32 @@ function Particle (id,name,anti,xi,yi,xf,yf) {
     this.frontConnection = null;
     this.backConnection = null;
     this.layer = new Konva.Layer();
+    this.w = 20;
+    this.h = 10;
+
+    this.calcArrowPoints = function(){
+        v1 = [(this.xf-this.xi)/Math.hypot((this.yf-this.yi),(this.xf-this.xi)),(this.yf-this.yi)/Math.hypot((this.yf-this.yi),(this.xf-this.xi))]
+        v2 = [-(this.yf-this.yi)/Math.hypot((this.yf-this.yi),(this.xf-this.xi)),(this.xf-this.xi)/Math.hypot((this.yf-this.yi),(this.xf-this.xi))]
+
+        arrowPoints = [
+        (this.xi+this.xf)/2 - (this.w/2)*v1[0] + v2[0]*this.h, (this.yi+this.yf)/2 -(this.w/2)*v1[1]+ v2[1]*this.h,
+        (this.xi+this.xf)/2 + (this.w/2)*v1[0], (this.yi+this.yf)/2 +(this.w/2)*v1[1],
+        (this.xi+this.xf)/2 - (this.w/2)*v1[0] - v2[0]*this.h, (this.yi+this.yf)/2 -(this.w/2)*v1[1]- v2[1]*this.h
+        ]
+        return arrowPoints
+    }
+
+
+
+
     this.arrow = new Konva.Line({
-          points: [
-          (this.xi+this.xf)/2 +this.yDiff*0.025, (this.yi+this.yf)/2-this.xDiff*0.025,
-          (this.xi+this.xf)/2 +this.xDiff*0.5, (this.yi+this.yf)/2+this.yDiff*0.05,
-          (this.xi+this.xf)/2 -this.yDiff*0.025, (this.yi+this.yf)/2+this.xDiff*0.025,
-          ],
+          points: this.calcArrowPoints(),
           fill: 'black',
           stroke: 'black',
           strokeWidth: 5,
           closed : true
     });
+
 
     this.line = new Konva.Line({
             points: interpolate([
@@ -32,7 +46,7 @@ function Particle (id,name,anti,xi,yi,xf,yf) {
             ],10),
             fill: '#00D2FF',
             stroke: 'black',
-            strokeWidth: 5,
+            strokeWidth: 2,
             closed : false,
             tension:0,
     });
@@ -42,15 +56,21 @@ function Particle (id,name,anti,xi,yi,xf,yf) {
 
 
 
-
+    
     this.text = new Konva.Text({
-      x: (this.xi+this.xf)/2 +this.yDiff*0.12, 
-      y: (this.yi+this.yf)/2-this.xDiff*0.12,
+      x: (this.xi+this.xf)/2 + 10, 
+      y: (this.yi+this.yf)/2 + 10,
       text: this.name,
       fontSize: 30,
       fontFamily: 'Calibri',
-      fill: 'black'
+      fill: 'black',
+      align:'center'
+
     });
+
+    this.text.offsetX(Math.round(this.text.width()/2))
+    this.text.offsetY(Math.round(this.text.height()/2))
+
 
     this.layer.add(this.line);
     if (this.name !=='g' && this.name !=='γ' && this.name !=='z'){
@@ -61,6 +81,10 @@ function Particle (id,name,anti,xi,yi,xf,yf) {
 
 
     this.draw = function(){
+
+      v1 = [(this.xf-this.xi)/Math.hypot((this.yf-this.yi),(this.xf-this.xi)),(this.yf-this.yi)/Math.hypot((this.yf-this.yi),(this.xf-this.xi))]
+      v2 = [-(this.yf-this.yi)/Math.hypot((this.yf-this.yi),(this.xf-this.xi)),(this.xf-this.xi)/Math.hypot((this.yf-this.yi),(this.xf-this.xi))]
+
       this.xDiff = this.xf - this.xi;
       this.yDiff = this.yf - this.yi;
 
@@ -79,19 +103,10 @@ function Particle (id,name,anti,xi,yi,xf,yf) {
         this.line.setPoints(coilPtsBuilder(this.xi,this.yi,this.xf,this.yf));
       }
 
+      this.text.setX(Math.round((this.xi+this.xf)/2 + (this.w/2)*v1[0]) + 30*v2[0]);
+      this.text.setY(Math.round((this.yi+this.yf)/2 + (this.w/2)*v1[1]) + 30*v2[1]);
+      this.arrow.setPoints(this.calcArrowPoints())
 
-
-
-      //not perfect but really minor issue
-      this.text.setX((this.xi+this.xf)/2 +this.yDiff*0.20);
-      this.text.setY((this.yi+this.yf)/2-this.xDiff*0.20);
-
-
-      this.arrow.setPoints([
-          (this.xi+this.xf)/2 +this.yDiff*0.05, (this.yi+this.yf)/2-this.xDiff*0.05,
-          (this.xi+this.xf)/2 +this.xDiff*0.1, (this.yi+this.yf)/2+this.yDiff*0.1,
-          (this.xi+this.xf)/2 -this.yDiff*0.05, (this.yi+this.yf)/2+this.xDiff*0.05,
-      ])
 
 
       this.layer.draw();

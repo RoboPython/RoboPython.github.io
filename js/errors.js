@@ -361,10 +361,10 @@ function checker() {
     }else{
 		const heading = document.getElementById("errorHeading");
 		heading.innerText = "No Errors";
-		const container = document.getElementById("floatingErrors");
-		container.innerHTML = '';
-		const container2 = document.getElementById("numberedErrors");
-		container2.innerHTML = '';
+		const container = document.getElementById("floatingErrorContainer");
+		container.innerHTML = ' ';
+		const container2 = document.getElementById("numberedErrorContainer");
+		container2.innerHTML = ' ';
 
     }
 }
