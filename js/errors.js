@@ -184,6 +184,8 @@ function checker() {
             }
             if (state.Vertices[Object.keys(state.Vertices)[i]].connections.length === 3) {
                 validVertex = false;
+                accountedFor = false;
+
 				if (nameSet.has("w+") && nameSet.has("w-") &&(nameSet.has("z")||nameSet.has("γ"))){
 					console.log("Valid Vertex");
                     validVertex = true;
@@ -249,6 +251,8 @@ function checker() {
                         if(parseFloat(outgoing.toFixed(3)) !== parseFloat(incoming.toFixed(3))){
 							state.Vertices[Object.keys(state.Vertices)[i]].drawLabel(numberedErrors.length + 1);
 							numberedErrors.push("charges are wrong for w+");
+                            accountedFor = true;
+
                         }else{
                             if((particleInfo[nameList[0]].quark && particleInfo[nameList[1]].quark)){
                                 if((particleInfo[nameList[0]].type != particleInfo[nameList[1]].type)){
@@ -256,6 +260,7 @@ function checker() {
                                 }else{
                                     state.Vertices[Object.keys(state.Vertices)[i]].drawLabel(numberedErrors.length + 1);
                                     numberedErrors.push("One must be up type and down type for quarks");
+                                    accountedFor = true;
                                 }
 
 
@@ -267,6 +272,7 @@ function checker() {
                                 if((particleInfo[nameList[0]].flavour != particleInfo[nameList[1]].flavour)){
                                     state.Vertices[Object.keys(state.Vertices)[i]].drawLabel(numberedErrors.length + 1);
                                     numberedErrors.push("Neutrino and lepton must be of the same flavour, electron/ electron, muon/muon etc");
+                                    accountedFor = true;
                                 }else{
                                     validVertex = true;
                                 }
@@ -278,6 +284,8 @@ function checker() {
                             else{
                                 state.Vertices[Object.keys(state.Vertices)[i]].drawLabel(numberedErrors.length + 1);
                                 numberedErrors.push("W<sup>+</sup> must use either 2 quarks or a neutrino and its partner lepton");
+                                accountedFor = true;
+
                             }
                             
 
@@ -296,6 +304,8 @@ function checker() {
 						}else{
 							state.Vertices[Object.keys(state.Vertices)[i]].drawLabel(numberedErrors.length + 1);
 							numberedErrors.push("A Vertex with a Z boson should have 2 of the same fermions joined to it");
+                            accountedFor = true;
+
 						}
                     }
 
@@ -308,10 +318,14 @@ function checker() {
 							}else{
 								state.Vertices[Object.keys(state.Vertices)[i]].drawLabel(numberedErrors.length + 1);
 								numberedErrors.push("To interact with a photon the particles must be charged");
+                                accountedFor = true;
+
 							}
 						}else{
 							state.Vertices[Object.keys(state.Vertices)[i]].drawLabel(numberedErrors.length + 1);
 							numberedErrors.push("A Vertex with a photon should have 2 of the same charged fermions joined to it");
+                            accountedFor = true;
+
 						}
                     }
                     if (bosonName === "g"){
@@ -323,10 +337,13 @@ function checker() {
 							}else{
 								state.Vertices[Object.keys(state.Vertices)[i]].drawLabel(numberedErrors.length + 1);
 								numberedErrors.push("To interact with a gluon the particles must be quarks");
+                                accountedFor = true;
+
 							}
 						}else{
 							state.Vertices[Object.keys(state.Vertices)[i]].drawLabel(numberedErrors.length + 1);
 							numberedErrors.push("A Vertex with a gluon should have 2 of the same quarks joined to it");
+                            accountedFor = true;
 						}
 
                     }
@@ -334,7 +351,7 @@ function checker() {
                 }
 
 
-                if (!validVertex){
+                if (!(validVertex || accountedFor)){
                     state.Vertices[Object.keys(state.Vertices)[i]].drawLabel(numberedErrors.length + 1);
                     numberedErrors.push("Vertices with three connections should be formed of three bosons or an incoming and outgoing fermion and a boson ");
                 }
